@@ -1,5 +1,5 @@
 """
-server/app.py — FastAPI server for Data Cleaning OpenEnv v4.0
+server/app.py — FastAPI server for Data Cleaning OpenEnv v4.1.0
 """
 
 import os
@@ -26,7 +26,7 @@ app = FastAPI(
         "Features 4 tasks, adversarial corruption mode, per-session isolation, "
         "and a catastrophic penalty system."
     ),
-    version="4.0.0",
+    version="4.1.0",
 )
 
 app.add_middleware(
@@ -52,7 +52,7 @@ def _get_session(session_id: str) -> DataCleaningEnvironment:
 
 @app.get("/health")
 def health():
-    return {"status": "healthy", "active_sessions": len(_sessions), "version": "4.0.0"}
+    return {"status": "healthy", "active_sessions": len(_sessions), "version": "4.1.0"}
 
 
 @app.get("/metadata")
@@ -65,7 +65,7 @@ def metadata():
             "Features 4 tasks (easy to expert), adversarial corruption mode, "
             "catastrophic penalties for destroying critical data, and dense reward signals."
         ),
-        "version": "4.0.0",
+        "version": "4.1.0",
         "author": "Akhilesh Kotwal",
         "tasks": VALID_TASKS,
         "modes": ["standard", "adversarial"],
@@ -209,7 +209,7 @@ def list_tasks():
         ],
         "modes": {"standard": "Normal mode.", "adversarial": "Enemy re-corrupts your best column after every step."},
         "action_cost": 0.04,
-        "version": "4.0.0",
+        "version": "4.1.0",
     }
 
 

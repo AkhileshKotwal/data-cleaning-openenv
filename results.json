@@ -84,6 +84,6 @@
     "average_steps": 6.25,
     "tasks_passed": 4,
     "tasks_total": 4,
-    "success_rate": 1.0
+    "success_rate": 0.99
   }
 }

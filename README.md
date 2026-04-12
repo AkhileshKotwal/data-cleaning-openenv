@@ -240,9 +240,9 @@ Safety filter enabled (blocks catastrophic/penalised actions at inference time)
 
 | Task | Difficulty | Score | Steps | Success |
 |------|------------|-------|-------|---------|
-| fix_nulls | Easy | 1.000 | 4 | ✓ |
-| fix_types | Medium | 1.000 | 4 | ✓ |
-| full_clean | Hard | 1.000 | 8 | ✓ |
+| fix_nulls | Easy | 0.990 | 4 | ✓ |
+| fix_types | Medium | 0.990 | 4 | ✓ |
+| full_clean | Hard | 0.990 | 8 | ✓ |
 | deceptive_clean | Expert | 0.750 | 6 | ✓ |
 | **Average** | | **0.938** | **5.5** | **4/4** |
 

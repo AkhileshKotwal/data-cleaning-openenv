@@ -440,7 +440,7 @@ def compute_penalty(action: DataCleaningAction, df: pd.DataFrame,
                 f"Mean is misleading here — use median.",
                 False)
 
-    return 0.01, "", False
+    return 0.0, "", False
 
 
 # ---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 name: data-cleaning-env
-version: "4.0.0"
+version: "4.1.0"
 description: >
   A real-world OpenEnv RL environment where AI agents learn to clean messy datasets.
   The agent receives a dirty dataframe and must apply structured cleaning actions
