@@ -57,7 +57,7 @@ class DataCleaningObservation(BaseModel):
     @classmethod
     def clamp_score_so_far(cls, v: float) -> float:
         """Hard boundary at serialization: score must be strictly (0, 1)."""
-        return max(0.05, min(0.95, round(float(v), 4)))
+        return max(0.01, min(0.99, round(float(v), 4)))
 
 
 class DataCleaningState(BaseModel):
@@ -74,4 +74,4 @@ class DataCleaningState(BaseModel):
     @classmethod
     def clamp_current_score(cls, v: float) -> float:
         """Hard boundary at serialization: score must be strictly (0, 1)."""
-        return max(0.05, min(0.95, round(float(v), 4)))
+        return max(0.01, min(0.99, round(float(v), 4)))

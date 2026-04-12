@@ -52,16 +52,16 @@ TASKS              = ["fix_nulls", "fix_types", "full_clean", "deceptive_clean"]
 
 # Safe bounds: strictly (0, 1) as required by hackathon validator.
 # Using 0.05/0.95 keeps well away from both boundaries even after rounding.
-_SCORE_MIN = 0.05
-_SCORE_MAX = 0.95
+_SCORE_MIN = 0.01
+_SCORE_MAX = 0.99
 
 
 def _clamp(value: float) -> float:
     """Clamp any float to be strictly between 0 and 1 (exclusive).
     The hackathon validator requires every value in results.json (scores AND rewards)
     to be strictly > 0 and < 1. Negative rewards from the environment are converted
-    to the minimum positive value (0.05) before logging.
-    Bounds: (0.05, 0.95)."""
+    to the minimum positive value (0.01) before logging.
+    Bounds: (0.01, 0.99)."""
     v = float(value)
     if v >= _SCORE_MAX:
         return _SCORE_MAX

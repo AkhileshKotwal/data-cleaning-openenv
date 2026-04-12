@@ -291,12 +291,12 @@ def _null_score(df, original_df, protected_nulls):
                if c not in protected_nulls)
     rem  = sum(df[c].isnull().sum() for c in df.columns
                if c not in protected_nulls and c in original_df.columns)
-    return 0.95 if orig == 0 else min(0.95, max(0.05, 1.0 - rem / orig))
+    return 1.0 if orig == 0 else max(0.0, 1.0 - rem / orig)
 
 
 def _duplicate_score(df, original_df):
     orig = original_df.duplicated().sum()
-    return 0.95 if orig == 0 else min(0.95, max(0.05, 1.0 - df.duplicated().sum() / orig))
+    return 1.0 if orig == 0 else max(0.0, 1.0 - df.duplicated().sum() / orig)
 
 
 def _outlier_score(df, original_df, numeric_cols, valid_outlier_cols):
@@ -311,7 +311,7 @@ def _outlier_score(df, original_df, numeric_cols, valid_outlier_cols):
         lo, hi = q1 - 1.5 * iqr, q3 + 1.5 * iqr
         total_orig += int(((original_df[col] < lo) | (original_df[col] > hi)).sum())
         total_rem  += int(((df[col] < lo) | (df[col] > hi)).sum())
-    return 0.95 if total_orig == 0 else min(0.95, max(0.05, 1.0 - total_rem / total_orig))
+    return 1.0 if total_orig == 0 else max(0.0, 1.0 - total_rem / total_orig)
 
 
 def _text_score(df, text_cols):
@@ -322,37 +322,36 @@ def _text_score(df, text_cols):
         s = df[col].dropna().astype(str)
         total += len(s)
         clean += int((s == s.str.strip().str.lower()).sum())
-    raw = clean / total if total else 0.95  # no text cols → treat as near-perfect but never 1.0
-    return max(0.05, min(0.95, raw))
+    raw = clean / total if total else 1.0  # no text cols → perfectly clean
+    return max(0.0, min(1.0, raw))
 
 
 def _clamp(score: float) -> float:
-    """Clamp score strictly between 0 and 1 (exclusive) as required by validator."""
+    """Clamp score strictly between 0 and 1 (exclusive) as required by validator.
+    Bounds are (0.01, 0.99) — well away from 0 and 1, and NOT at the sub-scorer
+    ceiling (which is now 1.0 raw), so a perfect clean returns 0.99, not a sentinel."""
     s = float(score)
     if s <= 0.0:
-        return 0.05
+        return 0.01
     if s >= 1.0:
-        return 0.95
-    return max(0.05, min(0.95, s))
+        return 0.99
+    return max(0.01, min(0.99, s))
 
 
 def _clamp_reward(reward: float) -> float:
     """
     Clamp reward so it is never exactly 0.0, 1.0, -1.0 or ±∞.
     Negative rewards ARE valid per openenv.yaml spec (range: [-1.0, 1.0]).
-    The hackathon validator only rejects exact 0 or exact ±1; it does NOT
-    require rewards to be positive.
-    Near-zero values (|r| < 0.005) are nudged to ±0.05 so they are never
-    printed as '0.00' after rounding.
-    Bounds: (-0.95, 0.95) — well inside (-1, 1).
+    Near-zero values (|r| < 0.005) are nudged to ±0.01.
+    Bounds: (-0.99, 0.99) — well inside (-1, 1).
     """
     r = float(reward)
-    if r <= -0.95:
-        return -0.95
-    if r >= 0.95:
-        return 0.95
+    if r <= -0.99:
+        return -0.99
+    if r >= 0.99:
+        return 0.99
     if -0.005 < r < 0.005:
-        return 0.05 if r >= 0 else -0.05
+        return 0.01 if r >= 0 else -0.01
     return r
 
 
@@ -380,7 +379,7 @@ def grade(task_id: str, df: pd.DataFrame, original_df: pd.DataFrame) -> float:
               + 0.25 * _text_score(df, ["region"])
               + 0.20 * _duplicate_score(df, original_df))
 
-    return 0.05  # unknown task_id — safe fallback
+    return 0.01  # unknown task_id — safe fallback
 
 
 # ---------------------------------------------------------------------------
@@ -657,7 +656,7 @@ class DataCleaningEnvironment:
             step_count=self._step,
             max_steps=self._max_steps,
             actions_taken=self._actions_taken,
-            current_score=_clamp(max(0.05, self._prev_score)),
+            current_score=_clamp(max(0.01, self._prev_score)),
             metadata={
                 "adversarial":             self.adversarial,
                 "total_penalty":           round(self._total_penalty, 4),

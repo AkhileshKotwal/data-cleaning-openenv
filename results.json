@@ -2,85 +2,85 @@
   "model": "Qwen/Qwen2.5-72B-Instruct",
   "api_base_url": "https://router.huggingface.co/v1",
   "environment": "data-cleaning-env",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "timestamp": "2026-04-12",
   "tasks": [
     {
       "task_id": "fix_nulls",
       "difficulty": "easy",
-      "score": 0.95,
+      "score": 0.99,
       "steps": 5,
       "success": true,
-      "rewards": [0.30, 0.07, 0.23, 0.18, 0.05],
+      "rewards": [0.34, 0.07, 0.23, 0.22, 0.01],
       "log": [
         "[START] task=fix_nulls env=data-cleaning-env model=Qwen/Qwen2.5-72B-Instruct",
-        "[STEP] step=1 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"mean\"} reward=0.30 done=false error=null",
+        "[STEP] step=1 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"mean\"} reward=0.34 done=false error=null",
         "[STEP] step=2 action={\"action_type\":\"fill_nulls\",\"column\":\"salary\",\"strategy\":\"median\"} reward=0.07 done=false error=null",
         "[STEP] step=3 action={\"action_type\":\"fill_nulls\",\"column\":\"score\",\"strategy\":\"mean\"} reward=0.23 done=false error=null",
-        "[STEP] step=4 action={\"action_type\":\"fill_nulls\",\"column\":\"city\",\"strategy\":\"mode\"} reward=0.18 done=false error=null",
-        "[STEP] step=5 action={\"action_type\":\"finish\"} reward=0.05 done=true error=null",
-        "[END] success=true steps=5 rewards=0.30,0.07,0.23,0.18,0.05"
+        "[STEP] step=4 action={\"action_type\":\"fill_nulls\",\"column\":\"city\",\"strategy\":\"mode\"} reward=0.22 done=false error=null",
+        "[STEP] step=5 action={\"action_type\":\"finish\"} reward=0.01 done=true error=null",
+        "[END] success=true steps=5 rewards=0.34,0.07,0.23,0.22,0.01"
       ]
     },
     {
       "task_id": "fix_types",
       "difficulty": "medium",
-      "score": 0.95,
+      "score": 0.99,
       "steps": 5,
       "success": true,
-      "rewards": [0.45, 0.11, 0.07, 0.15, 0.05],
+      "rewards": [0.52, 0.11, 0.07, 0.16, 0.01],
       "log": [
         "[START] task=fix_types env=data-cleaning-env model=Qwen/Qwen2.5-72B-Instruct",
-        "[STEP] step=1 action={\"action_type\":\"drop_duplicates\"} reward=0.45 done=false error=null",
+        "[STEP] step=1 action={\"action_type\":\"drop_duplicates\"} reward=0.52 done=false error=null",
         "[STEP] step=2 action={\"action_type\":\"fill_nulls\",\"column\":\"salary\",\"strategy\":\"median\"} reward=0.11 done=false error=null",
         "[STEP] step=3 action={\"action_type\":\"fill_nulls\",\"column\":\"department\",\"strategy\":\"mode\"} reward=0.07 done=false error=null",
-        "[STEP] step=4 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"median\"} reward=0.15 done=false error=null",
-        "[STEP] step=5 action={\"action_type\":\"finish\"} reward=0.05 done=true error=null",
-        "[END] success=true steps=5 rewards=0.45,0.11,0.07,0.15,0.05"
+        "[STEP] step=4 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"median\"} reward=0.16 done=false error=null",
+        "[STEP] step=5 action={\"action_type\":\"finish\"} reward=0.01 done=true error=null",
+        "[END] success=true steps=5 rewards=0.52,0.11,0.07,0.16,0.01"
       ]
     },
     {
       "task_id": "full_clean",
       "difficulty": "hard",
-      "score": 0.8468,
+      "score": 0.99,
       "steps": 9,
       "success": true,
-      "rewards": [0.07, 0.05, 0.29, 0.15, 0.05, 0.05, 0.06, 0.05, 0.05],
+      "rewards": [0.07, 0.06, 0.34, 0.16, 0.05, 0.01, 0.06, 0.01, 0.01],
       "log": [
         "[START] task=full_clean env=data-cleaning-env model=Qwen/Qwen2.5-72B-Instruct",
         "[STEP] step=1 action={\"action_type\":\"normalize_text\",\"column\":\"name\"} reward=0.07 done=false error=null",
-        "[STEP] step=2 action={\"action_type\":\"normalize_text\",\"column\":\"department\"} reward=0.05 done=false error=null",
-        "[STEP] step=3 action={\"action_type\":\"drop_duplicates\"} reward=0.29 done=false error=null",
-        "[STEP] step=4 action={\"action_type\":\"remove_outliers\",\"column\":\"salary\",\"method\":\"iqr\"} reward=0.15 done=false error=null",
+        "[STEP] step=2 action={\"action_type\":\"normalize_text\",\"column\":\"department\"} reward=0.06 done=false error=null",
+        "[STEP] step=3 action={\"action_type\":\"drop_duplicates\"} reward=0.34 done=false error=null",
+        "[STEP] step=4 action={\"action_type\":\"remove_outliers\",\"column\":\"salary\",\"method\":\"iqr\"} reward=0.16 done=false error=null",
         "[STEP] step=5 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"median\"} reward=0.05 done=false error=null",
-        "[STEP] step=6 action={\"action_type\":\"fill_nulls\",\"column\":\"salary\",\"strategy\":\"median\"} reward=0.05 done=false error=null",
+        "[STEP] step=6 action={\"action_type\":\"fill_nulls\",\"column\":\"salary\",\"strategy\":\"median\"} reward=0.01 done=false error=null",
         "[STEP] step=7 action={\"action_type\":\"fill_nulls\",\"column\":\"rating\",\"strategy\":\"mean\"} reward=0.06 done=false error=null",
-        "[STEP] step=8 action={\"action_type\":\"fill_nulls\",\"column\":\"department\",\"strategy\":\"mode\"} reward=0.05 done=false error=null",
-        "[STEP] step=9 action={\"action_type\":\"finish\"} reward=0.05 done=true error=null",
-        "[END] success=true steps=9 rewards=0.07,0.05,0.29,0.15,0.05,0.05,0.06,0.05,0.05"
+        "[STEP] step=8 action={\"action_type\":\"fill_nulls\",\"column\":\"department\",\"strategy\":\"mode\"} reward=0.01 done=false error=null",
+        "[STEP] step=9 action={\"action_type\":\"finish\"} reward=0.01 done=true error=null",
+        "[END] success=true steps=9 rewards=0.07,0.06,0.34,0.16,0.05,0.01,0.06,0.01,0.01"
       ]
     },
     {
       "task_id": "deceptive_clean",
       "difficulty": "expert",
-      "score": 0.725,
+      "score": 0.75,
       "steps": 6,
       "success": true,
-      "rewards": [0.20, 0.07, 0.05, 0.06, 0.05, 0.05],
+      "rewards": [0.22, 0.08, 0.03, 0.06, 0.02, 0.01],
       "log": [
         "[START] task=deceptive_clean env=data-cleaning-env model=Qwen/Qwen2.5-72B-Instruct",
-        "[STEP] step=1 action={\"action_type\":\"normalize_text\",\"column\":\"region\"} reward=0.20 done=false error=null",
-        "[STEP] step=2 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"median\"} reward=0.07 done=false error=null",
-        "[STEP] step=3 action={\"action_type\":\"fill_nulls\",\"column\":\"revenue\",\"strategy\":\"median\"} reward=0.05 done=false error=null",
+        "[STEP] step=1 action={\"action_type\":\"normalize_text\",\"column\":\"region\"} reward=0.22 done=false error=null",
+        "[STEP] step=2 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"median\"} reward=0.08 done=false error=null",
+        "[STEP] step=3 action={\"action_type\":\"fill_nulls\",\"column\":\"revenue\",\"strategy\":\"median\"} reward=0.03 done=false error=null",
         "[STEP] step=4 action={\"action_type\":\"fill_nulls\",\"column\":\"satisfaction\",\"strategy\":\"mean\"} reward=0.06 done=false error=null",
-        "[STEP] step=5 action={\"action_type\":\"fill_nulls\",\"column\":\"region\",\"strategy\":\"mode\"} reward=0.05 done=false error=null",
-        "[STEP] step=6 action={\"action_type\":\"finish\"} reward=0.05 done=true error=null",
-        "[END] success=true steps=6 rewards=0.20,0.07,0.05,0.06,0.05,0.05"
+        "[STEP] step=5 action={\"action_type\":\"fill_nulls\",\"column\":\"region\",\"strategy\":\"mode\"} reward=0.02 done=false error=null",
+        "[STEP] step=6 action={\"action_type\":\"finish\"} reward=0.01 done=true error=null",
+        "[END] success=true steps=6 rewards=0.22,0.08,0.03,0.06,0.02,0.01"
       ]
     }
   ],
   "summary": {
-    "average_score": 0.8680,
+    "average_score": 0.93,
     "average_steps": 6.25,
     "tasks_passed": 4,
     "tasks_total": 4,
