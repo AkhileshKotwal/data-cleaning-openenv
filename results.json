@@ -1,0 +1,54 @@
+{
+  "model": "gpt-4.1-mini",
+  "api_base_url": "https://api.openai.com/v1",
+  "benchmark": "ops_workbench",
+  "version": "0.1.0",
+  "timestamp": "2026-04-12",
+  "tasks": [
+    {
+      "task_name": "data_cleaning",
+      "difficulty": "hard",
+      "success": true,
+      "steps": 25,
+      "final_score": 0.98,
+      "rewards": [
+        0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005,
+        0.0143, 0.05, 0.0143, 0.0143, 0.0386,
+        0.005, 0.1, 0.005, 0.1,
+        0.0107, 0.0107, 0.0107,
+        0.0357, 0.0357, 0.0357, 0.0264,
+        0.005
+      ],
+      "log": [
+        "[START] task=data_cleaning env=ops_workbench model=gpt-4.1-mini",
+        "[STEP] step=1  action={\"action_type\":\"inspect\"} reward=0.01 done=false error=null",
+        "[STEP] step=2  action={\"action_type\":\"inspect\",\"column\":\"Customer ID\"} reward=0.01 done=false error=null",
+        "[STEP] step=3  action={\"action_type\":\"inspect\",\"column\":\"First Name\"} reward=0.01 done=false error=null",
+        "[STEP] step=4  action={\"action_type\":\"inspect\",\"column\":\"signupDate\"} reward=0.01 done=false error=null",
+        "[STEP] step=5  action={\"action_type\":\"inspect\",\"column\":\"country\"} reward=0.01 done=false error=null",
+        "[STEP] step=6  action={\"action_type\":\"inspect\",\"column\":\"purchase_amount\"} reward=0.01 done=false error=null",
+        "[STEP] step=7  action={\"action_type\":\"inspect\",\"column\":\"Age\"} reward=0.01 done=false error=null",
+        "[STEP] step=8  action={\"action_type\":\"inspect\",\"column\":\"notes\"} reward=0.01 done=false error=null",
+        "[STEP] step=9  action={\"action_type\":\"rename_column\",\"old_name\":\"Customer ID\",\"new_name\":\"customer_id\"} reward=0.01 done=false error=null",
+        "[STEP] step=10 action={\"action_type\":\"rename_column\",\"old_name\":\"First Name\",\"new_name\":\"first_name\"} reward=0.05 done=false error=null",
+        "[STEP] step=11 action={\"action_type\":\"rename_column\",\"old_name\":\"signupDate\",\"new_name\":\"signup_date\"} reward=0.01 done=false error=null",
+        "[STEP] step=12 action={\"action_type\":\"rename_column\",\"old_name\":\"Age\",\"new_name\":\"age\"} reward=0.01 done=false error=null",
+        "[STEP] step=13 action={\"action_type\":\"remove_duplicates\"} reward=0.04 done=false error=null",
+        "[STEP] step=14 action={\"action_type\":\"fix_value\",\"column\":\"country\",\"find\":\"usa\",\"replace\":\"USA\"} reward=0.01 done=false error=null",
+        "[STEP] step=15 action={\"action_type\":\"fix_value\",\"column\":\"country\",\"find\":\"U.S.A\",\"replace\":\"USA\"} reward=0.10 done=false error=null",
+        "[STEP] step=16 action={\"action_type\":\"fix_value\",\"column\":\"first_name\",\"find\":\"maya\",\"replace\":\"Maya\"} reward=0.01 done=false error=null",
+        "[STEP] step=17 action={\"action_type\":\"fix_value\",\"column\":\"first_name\",\"find\":\"ana\",\"replace\":\"Ana\"} reward=0.10 done=false error=null",
+        "[STEP] step=18 action={\"action_type\":\"fill_nulls\",\"column\":\"purchase_amount\",\"strategy\":\"median\"} reward=0.01 done=false error=null",
+        "[STEP] step=19 action={\"action_type\":\"fill_nulls\",\"column\":\"first_name\",\"strategy\":\"mode\"} reward=0.01 done=false error=null",
+        "[STEP] step=20 action={\"action_type\":\"fill_nulls\",\"column\":\"age\",\"strategy\":\"median\"} reward=0.01 done=false error=null",
+        "[STEP] step=21 action={\"action_type\":\"cast_type\",\"column\":\"customer_id\",\"dtype\":\"int\"} reward=0.04 done=false error=null",
+        "[STEP] step=22 action={\"action_type\":\"cast_type\",\"column\":\"signup_date\",\"dtype\":\"datetime\"} reward=0.04 done=false error=null",
+        "[STEP] step=23 action={\"action_type\":\"cast_type\",\"column\":\"purchase_amount\",\"dtype\":\"float\"} reward=0.04 done=false error=null",
+        "[STEP] step=24 action={\"action_type\":\"cast_type\",\"column\":\"age\",\"dtype\":\"int\"} reward=0.03 done=false error=null",
+        "[STEP] step=25 action={\"action_type\":\"submit\"} reward=0.01 done=true error=null",
+        "[END] success=true steps=25 rewards=0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.05,0.01,0.01,0.04,0.01,0.10,0.01,0.10,0.01,0.01,0.01,0.04,0.04,0.04,0.03,0.01"
+      ]
+    }
+  ],
+  "mean_score": 0.98
+}

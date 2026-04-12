@@ -1,0 +1,113 @@
+spec_version: 1
+name: ops_workbench_env
+version: "0.1.0"
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+
+description: >
+  A data cleaning benchmark where an agent inspects and repairs a messy
+  customer dataset — resolving nulls, correcting data types, removing
+  duplicates, standardising categorical values, and renaming all columns
+  to snake_case. The environment provides dense shaped rewards at every
+  step and terminates when the agent calls submit or exhausts 30 steps.
+
+author: AkhileshKotwal
+license: apache-2.0
+tags:
+  - openenv
+  - data-cleaning
+  - tabular
+  - rl
+  - real-world
+
+tasks:
+  - id: data_cleaning
+    difficulty: hard
+    description: >
+      Clean a 5-row customer table that contains mixed-case column names,
+      wrong data types, one duplicate row, two null values, and inconsistent
+      categorical values (country and first_name). The agent must inspect
+      before modifying, use the correct null-fill strategy per column, and
+      submit only after all issues are resolved.
+    max_steps: 30
+    scoring: >
+      Weighted average of five sub-scores: null_resolution (30%),
+      correct_data_types (25%), no_duplicate_rows (15%),
+      value_consistency (20%), snake_case_column_names (10%).
+      Final score clipped to (0.01, 0.98).
+
+action_space:
+  type: structured
+  actions:
+    - inspect
+    - fill_nulls
+    - rename_column
+    - cast_type
+    - remove_duplicates
+    - fix_value
+    - normalize
+    - drop_column
+    - submit
+
+observation_space:
+  type: structured
+  fields:
+    - task_name
+    - difficulty
+    - objective
+    - tools
+    - grading_criteria
+    - dataset_columns
+    - dataset_preview
+    - current_dtypes
+    - null_counts
+    - duplicate_rows
+    - tool_result
+    - inspected_columns
+    - progress
+    - done
+    - reward
+    - last_action_error
+
+reward:
+  type: dense
+  range: [-1.0, 1.0]
+  description: >
+    reward = (score_after - score_before) + shaped_penalty.
+    Shaped penalties: -0.10 for skipping the mandatory first inspect,
+    -0.05 per action error, -0.10 for more than 5 consecutive errors,
+    -0.08 for submitting in fewer than 3 steps or exhausting all steps.
+    Inspect steps that move no score produce a small nudge (0.005) so
+    reward is never exactly 0.
+
+inference:
+  script: inference.py
+  entrypoint: "python inference.py"
+  results_file: results.json
+  env_vars:
+    - name: HF_TOKEN
+      required: true
+      description: "API token for the inference model provider"
+    - name: API_BASE_URL
+      required: false
+      default: "https://api.openai.com/v1"
+    - name: MODEL_NAME
+      required: false
+      default: "gpt-4.1-mini"
+
+endpoints:
+  health: GET  /health
+  reset:  POST /reset
+  step:   POST /step
+  state:  GET  /state
+  docs:   GET  /docs
+
+hardware:
+  vcpu: 2
+  memory_gb: 8
+
+docker:
+  port: 8000
+  entrypoint: "python -m server.app"

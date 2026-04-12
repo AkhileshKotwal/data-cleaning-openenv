@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ops-workbench-openenv"
+version = "0.1.0"
+description = "An OpenEnv benchmark for realistic office workflow tasks."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "openai>=1.50.0",
+  "openenv @ git+https://github.com/meta-pytorch/OpenEnv.git",
+  "pydantic>=2.8.0",
+  "uvicorn>=0.30.0",
+]
+
+[tool.setuptools]
+py-modules = ["client", "environment", "models", "tasks"]
+
+[tool.setuptools.packages.find]
+include = ["server"]
