@@ -382,6 +382,7 @@ class OpsWorkbenchEnv:
         dataset_info = inspect_dataset(self._rows, self._columns)
         score, _ = compute_grade(self._rows, self._columns)
         # Enforce strict open interval (0, 1) as required by the hackathon validator.
+        # Enforce strict (0,1) for validator - clamp explicitly to avoid 0.0/1.0
         safe_score = round(max(0.01, min(0.98, score)), 4)
         return WorkbenchObservation(
             objective=OBJECTIVE,

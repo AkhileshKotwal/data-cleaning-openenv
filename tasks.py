@@ -213,6 +213,7 @@ def compute_grade(rows: List[Dict[str, Any]], columns: List[str]) -> Tuple[float
         + 0.20 * consistency_score
         + 0.10 * snake_score
     )
+    # Clamp to strict (0,1) for task validator
     clipped = min(max(weighted, 0.01), 0.98)
     return clipped, {
         "null_resolution": round(null_resolution, 4),

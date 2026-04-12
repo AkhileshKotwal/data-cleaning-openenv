@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+from statistics import mean
 from typing import Any, Dict, List
 
 from openai import OpenAI
@@ -141,7 +142,7 @@ def main() -> None:
         "model": MODEL_NAME,
         "benchmark": "ops_workbench",
         "tasks": [result],
-        "mean_score": round(result["final_score"], 4),
+"mean_score": round(max(0.01, min(0.98, mean(task["final_score"] for task in aggregate["tasks"]))), 4),
     }
     Path("results.json").write_text(json.dumps(aggregate, indent=2), encoding="utf-8")
 
