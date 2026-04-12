@@ -9,8 +9,10 @@ COPY pyproject.toml README.md openenv.yaml ./
 COPY __init__.py client.py environment.py models.py tasks.py ./
 COPY server ./server
 
-RUN python -m pip install --upgrade pip && \
-    pip install .
+RUN apt-get update && apt-get install -y --no-install-recommends git && \
+    rm -rf /var/lib/apt/lists/* && \
+    python -m pip install --upgrade pip && \
+    pip install --no-cache-dir .
 
 EXPOSE 8000
 
