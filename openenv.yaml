@@ -1,0 +1,121 @@
+name: data-cleaning-env
+version: "4.0.0"
+description: >
+  A real-world OpenEnv RL environment where AI agents learn to clean messy datasets.
+  The agent receives a dirty dataframe and must apply structured cleaning actions
+  to maximise a cleaning quality score. Features 4 tasks (easy → expert),
+  a strategic adversarial corruption engine, catastrophic penalties for
+  destroying critical data, and a per-step action cost that rewards efficiency.
+
+author: Akhilesh Kotwal
+license: apache-2.0
+tags:
+  - openenv
+  - data-cleaning
+  - real-world
+  - tabular
+  - rl
+  - adversarial
+
+tasks:
+  - id: fix_nulls
+    difficulty: easy
+    description: >
+      Fill all missing values using correct strategies.
+      No traps. Straightforward null-filling across 4 columns.
+    max_steps: 10
+    scoring: fraction of originally-null cells that are filled
+
+  - id: fix_types
+    difficulty: medium
+    description: >
+      Fix incorrect data types and remove duplicate rows.
+      join_date nulls are intentional — filling them is penalised.
+    max_steps: 15
+    scoring: "0.5 * null_score + 0.5 * duplicate_score"
+
+  - id: full_clean
+    difficulty: hard
+    description: >
+      Full cleaning pipeline — fix nulls, duplicates, outliers, and text.
+      email nulls are protected. rating=5.0 values are valid. salary is
+      right-skewed (use median not mean). Wrong moves trigger penalties.
+    max_steps: 20
+    scoring: "0.30*null + 0.25*duplicate + 0.25*outlier + 0.20*text"
+
+  - id: deceptive_clean
+    difficulty: expert
+    description: >
+      Conflicting signals everywhere. High revenue rows look like outliers
+      but are real. notes nulls are intentional. Near-duplicate rows have
+      different customer_ids (repeat purchases, not true duplicates).
+      Dropping customer_id triggers catastrophic termination (-1.0 penalty).
+    max_steps: 15
+    scoring: "0.30*null + 0.25*outlier + 0.25*text + 0.20*duplicate"
+
+action_space:
+  type: structured
+  actions:
+    - fill_nulls
+    - drop_duplicates
+    - cast_column
+    - remove_outliers
+    - normalize_text
+    - finish
+
+observation_space:
+  type: structured
+  fields:
+    - task_id
+    - step
+    - session_id
+    - columns        # per-column: dtype, null_count, null_pct, unique_count, sample_values
+    - total_rows
+    - duplicate_rows
+    - outlier_counts # column → outlier row count
+    - score_so_far
+    - done
+    - message
+    - metadata       # adversary_active, hints, protected_nulls, valid_outlier_cols,
+                     # critical_cols, action_cost, catastrophic_termination
+
+reward:
+  type: dense
+  range: [-1.0, 1.0]
+  description: >
+    reward = score_after_action - score_before_action - action_cost + penalty.
+    action_cost = 0.04 per step (rewards efficiency).
+    penalty = 0.0 on correct actions, up to -1.0 for catastrophic mistakes.
+    Dense incremental signal at every step.
+
+adversarial_mode:
+  description: >
+    When adversarial=true, a strategic adversary acts after every agent step.
+    It targets the column where the agent made the most progress and re-corrupts it.
+    Difficulty is configurable 0.0–1.0.
+  activate: "POST /reset with {\"adversarial\": true, \"adversary_difficulty\": 0.4}"
+
+penalties:
+  action_cost:           -0.04   # every step
+  wrong_strategy:        -0.20   # e.g. mean on categorical column
+  fill_protected_null:   -0.35   # filling intentional nulls
+  mean_on_skewed:        -0.20   # mean on salary/revenue (right-skewed)
+  remove_valid_outlier:  -1.00   # catastrophic — valid data destroyed
+  drop_critical_column:  -1.00   # catastrophic — primary key dropped
+
+endpoints:
+  health: GET  /health
+  reset:  POST /reset
+  step:   POST /step
+  state:  GET  /state
+  tasks:  GET  /tasks
+  docs:   GET  /docs
+  web:    GET  /web
+
+hardware:
+  vcpu: 2
+  memory_gb: 8
+
+docker:
+  port: 7860
+  entrypoint: "uvicorn server.app:app --host 0.0.0.0 --port 7860 --workers 2"
